@@ -1,7 +1,9 @@
 const express = require("express");
 const fetch = require("node-fetch");
+const ccxt = require("ccxt");
+
 const app = express();
-app.listen(4000, () => console.log("Listening at 3000"));
+app.listen(4000, () => console.log("Listening at 4000"));
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
@@ -9,19 +11,15 @@ app.use(express.json());
 var symbol = "DOGE";
 
 app.get("/crypto", (req, res) => {
-  const url = `https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?symbol=${symbol}`;
-  const options = {
-    method: "GET",
-    headers: {
-      "X-CMC_PRO_API_KEY": "cb701616-6d64-491d-81ed-aecdeff42d99",
-    },
-  };
-  fetch(url, options)
-    .then((res) => res.json())
-    .then((json) => {
-      //var parsed_json = JSON.parse(json);
-      console.log(json["data"][symbol].quote.USD.price);
-      var price = json["data"][symbol].quote.USD.price;
+  //access exchange and API
+  var exchange = new ccxt.binance();
+  (async () => {
+    if (exchange.has["fetchTicker"]) {
+      //get ticker info from symbol
+      var info = await exchange.fetchTicker(`${symbol}/USDT`);
+      var price = info.last;
+      console.log(price);
       res.send({ price });
-    });
+    }
+  })();
 });
