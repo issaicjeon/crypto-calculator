@@ -8,17 +8,23 @@ app.use(express.static("public"));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-var symbol = "ETH";
+var symbol = "";
+var price = -1;
+var beginDate = "";
+var amount = -1;
 var exchange = new ccxt.binance();
 
 app.post("/symbol", (req, res) => {
-  symbol = req.body.symbol;
+  symbol = req.body.symbol.toUpperCase();
   console.log(symbol);
+});
+
+app.post("/date", (req, res) => {
+  console.log(req.body.date);
 });
 
 app.get("/price", (req, res) => {
   //access exchange and API
-  var price = -1;
   (async () => {
     if (exchange.has["fetchTicker"]) {
       //get ticker info from symbol
@@ -27,8 +33,8 @@ app.get("/price", (req, res) => {
         var info = await exchange.fetchTicker(`${symbol}/USDT`);
         price = info.last;
         console.log(info);
-        res.send({ price });
-      } else res.send({ price });
+      }
+      res.send({ price });
     }
   })();
 });
@@ -39,7 +45,7 @@ console.log("working");
     await sleep(exchange.rateLimit); // milliseconds
     console.log(
       await exchange.fetchOHLCV(
-        `${symbol}/USDT`,
+        "BTC/USDT",
         "1m",
         //TODO: Convert from GMT to EST
         exchange.parse8601("2020-01-01T00:00:00Z"),
