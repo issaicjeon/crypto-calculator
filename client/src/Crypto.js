@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "axios";
+import Dates from "./Dates.js";
 
 export default class Crypto extends React.Component {
   constructor() {
@@ -7,11 +8,16 @@ export default class Crypto extends React.Component {
     this.state = {
       price: 0,
       symbol: "",
+      date: "",
     };
   }
 
-  handleChange = (event) => {
+  handleSymbolChange = (event) => {
     this.setState({ symbol: event.target.value });
+  };
+
+  handleBuyDateChange = (event) => {
+    this.setState({ date: event.target.value });
   };
 
   buttonClick = () => {
@@ -34,13 +40,15 @@ export default class Crypto extends React.Component {
       <div>
         Get the current price of any cryptocurrency:
         <div>
-          <form>
-            <input
-              value={this.state.value}
-              onChange={this.handleChange}
-            ></input>
-          </form>
+          Enter symbol:{" "}
+          <input
+            value={this.state.value}
+            onChange={this.handleSymbolChange}
+          ></input>
           <button onClick={this.buttonClick}>Click me!</button>
+        </div>
+        <div>
+          Enter buying date: <Dates></Dates>
         </div>
         <div>
           The current price of {this.state.symbol} is: {this.state.price}
