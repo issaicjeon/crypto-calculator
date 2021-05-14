@@ -30,22 +30,12 @@ app.post("/selldate", (req, res) => {
   console.log(selldate);
 });
 
-// app.get("/price", (req, res) => {
-//   //access exchange and API
-//   (async () => {
-//     if (exchange.has["fetchTicker"]) {
-//       //get ticker info from symbol
-//       await exchange.loadMarkets();
-//       if (exchange.symbols.includes(`${symbol}/USDT`)) {
-//         var info = await exchange.fetchTicker(`${symbol}/USDT`);
-//         price = info.last;
-//         console.log(info);
-//       }
-//       res.send({ price });
-//     }
-//   })();
-// });
+app.post("/amount", (req, res) => {
+  amount = req.body.amount;
+  console.log(amount);
+});
 
+//get the price of cryptocurrency at the buying date
 app.get("/price", (req, res) => {
   (async () => {
     let sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -56,12 +46,12 @@ app.get("/price", (req, res) => {
 
       price = data[0][4];
       res.send({ price });
-      console.log(data);
+      console.log("buy data: " + data);
     }
   })();
 });
-//TODO: Make sure sell date is after buy date
-//TODO: Fix code below
+
+//get the price of cryptocurrency at the selling date
 app.get("/tmpprice", (req, res) => {
   (async () => {
     let sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -70,9 +60,11 @@ app.get("/tmpprice", (req, res) => {
 
       var data = await exchange.fetchOHLCV(`${symbol}/USDT`, "1m", selldate, 1);
 
-      price = data[0][4];
-      res.send({ price });
-      console.log(data);
+      console.log("sell data " + data);
+      var tmpprice = data[0][4];
+      res.send({ tmpprice });
     }
   })();
 });
+
+//TODO: Make sure sell date is after buy date

@@ -4,8 +4,18 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 var Dates = (props) => {
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
+  //set initial buying and selling date as appropriate
+  var buydate = new Date();
+  buydate.setHours(0);
+  buydate.setMinutes(0);
+  buydate.setSeconds(0);
+  var selldate = new Date();
+  selldate.setMinutes(selldate.getMinutes() - 1);
+
+  const [startDate, setStartDate] = useState(buydate);
+  const [endDate, setEndDate] = useState(selldate);
+
+  //send back to profit.js to update dates
   function changeStart(date) {
     setStartDate(date);
     console.log(date);
@@ -16,6 +26,7 @@ var Dates = (props) => {
     console.log(date);
     props.getEndDate(date.getTime(), date.toLocaleString());
   }
+
   return (
     <div>
       <div>
@@ -40,19 +51,6 @@ var Dates = (props) => {
       </div>
     </div>
   );
-
-  // () => {
-  //   const [startDate, setStartDate] = useState(new Date());
-  //   return (
-  //     <DatePicker
-  //       selected={startDate}
-  //       onChange={(date) => setStartDate(date)}
-  //       timeInputLabel="Time:"
-  //       dateFormat="MM/dd/yyyy h:mm aa"
-  //       showTimeInput
-  //     />
-  //   );
-  // };
 };
 
 export default Dates;

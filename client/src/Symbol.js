@@ -21,6 +21,7 @@ export default class Symbol extends React.Component {
           <input
             value={this.state.value}
             onChange={this.handleSymbolChange}
+            placeholder="'BTC'"
           ></input>
         </div>
       </div>
