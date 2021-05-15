@@ -22,8 +22,7 @@ export default class Profit extends React.Component {
       selldate: selldate.getTime(),
       selldatestring: selldate.toLocaleString(),
       amount: 0,
-      price: 0,
-      tmpprice: 0,
+      profit: 0,
     };
   }
 
@@ -73,26 +72,20 @@ export default class Profit extends React.Component {
       selldate: this.state.selldate,
     });
 
-    axios.get("/price").then((response) => {
-      this.setState({
-        price: response.data.price,
-      });
-    });
-
-    axios.get("/tmpprice").then((response) => {
-      this.setState({
-        tmpprice: response.data.tmpprice,
-      });
-    });
-
     axios.post("/amount", {
       amount: this.state.amount,
+    });
+
+    axios.get("/profit").then((response) => {
+      this.setState({
+        profit: response.data.profit,
+      });
     });
   };
 
   render() {
     return (
-      <div>
+      <div className="Body">
         <Symbol getSymbol={this.updateSymbol}></Symbol>
         <Amount getAmount={this.updateAmount}></Amount>
         <Dates
@@ -102,23 +95,14 @@ export default class Profit extends React.Component {
         <div>
           <button onClick={this.buttonClick}>Get Profit!</button>
         </div>
-        {this.state.price !== 0 && (
+        {this.state.profit !== 0 && (
           <div>
-            The price of {this.state.symbol.toUpperCase()} at{" "}
-            {this.state.buydatestring} is:{" "}
-            {this.formatter.format(this.state.price)}
-            {this.state.price === -1 && <div>Error: Symbol not found</div>}
-          </div>
-        )}
-        {this.state.price !== 0 && (
-          <div>
-            The price of {this.state.symbol.toUpperCase()} at{" "}
+            The amount of profit from buying ${this.state.amount} of{" "}
+            {this.state.symbol.toUpperCase()} from {this.state.buydatestring} to{" "}
             {this.state.selldatestring} is:{" "}
-            {this.formatter.format(this.state.tmpprice)}
-            {this.state.price === -1 && <div>Error: Symbol not found</div>}
+            {this.formatter.format(this.state.profit)}
           </div>
         )}
-        <div>Amount is: {this.state.amount}</div>
       </div>
     );
   }

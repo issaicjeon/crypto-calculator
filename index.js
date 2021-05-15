@@ -9,11 +9,30 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 var symbol = "";
-var price = -1;
 var buydate = "";
 var selldate = "";
 var amount = -1;
 var exchange = new ccxt.binance();
+// (async () => {
+//   console.log(await exchange.loadMarkets());
+// })();
+
+// (async () => {
+//   let sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+//   if (exchange.has.fetchOHLCV) {
+//     console.log("Jello");
+//     await sleep(exchange.rateLimit); // milliseconds
+
+//     //get buying and selling prices from API
+//     var buyamount = await exchange.fetchOHLCV(
+//       "BTC/USDT",
+//       "1m",
+//       exchange.parse8601("2018-01-01T00:00:00Z"),
+//       1
+//     );
+//     console.log(buyamount);
+//   }
+// })();
 
 app.post("/symbol", (req, res) => {
   symbol = req.body.symbol.toUpperCase();
@@ -35,36 +54,41 @@ app.post("/amount", (req, res) => {
   console.log(amount);
 });
 
-//get the price of cryptocurrency at the buying date
-app.get("/price", (req, res) => {
+app.get("/profit", (req, res) => {
   (async () => {
     let sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
     if (exchange.has.fetchOHLCV) {
       await sleep(exchange.rateLimit); // milliseconds
 
-      var data = await exchange.fetchOHLCV(`${symbol}/USDT`, "1m", buydate, 1);
+      //get buying and selling prices from API
+      var buyamount = await exchange.fetchOHLCV(
+        `${symbol}/USDT`,
+        "1m",
+        buydate,
+        1
+      );
+      var sellamount = await exchange.fetchOHLCV(
+        `${symbol}/USDT`,
+        "1m",
+        selldate,
+        1
+      );
 
-      price = data[0][4];
-      res.send({ price });
-      console.log("buy data: " + data);
+      //calculate profit
+      var shares = amount / buyamount[0][4];
+      var profit = (sellamount[0][4] - buyamount[0][4]) * shares;
+      console.log(profit);
+      res.send({ profit });
     }
   })();
 });
 
-//get the price of cryptocurrency at the selling date
-app.get("/tmpprice", (req, res) => {
-  (async () => {
-    let sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-    if (exchange.has.fetchOHLCV) {
-      await sleep(exchange.rateLimit); // milliseconds
-
-      var data = await exchange.fetchOHLCV(`${symbol}/USDT`, "1m", selldate, 1);
-
-      console.log("sell data " + data);
-      var tmpprice = data[0][4];
-      res.send({ tmpprice });
-    }
-  })();
-});
-
-//TODO: Make sure sell date is after buy date
+/*TODO:
+-Add CSS - with moving background
+-Change exchange to get data before 2017 (currently using binance)
+-Be able to enter new times/amounts/symbols after the first time without refreshing page 
+-Dropdown of symbols
+-Add loading symbol while profit is fetched
+-Throw error if sell date is after buy date or dates out of range
+-Error if symbol incorrect
+*/
