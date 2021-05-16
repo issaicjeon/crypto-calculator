@@ -7,11 +7,23 @@
   font-size: 35px;
 }
 
+.SubHeader {
+  color: white;
+  font-family: "Noto Sans JP", sans-serif;
+  position: relative;
+  bottom: 80px;
+  font-weight: 200;
+  font-size: 25px;
+}
+
 .Body {
   color: white;
   font-family: "Noto Sans JP", sans-serif;
   font-weight: 300;
-  font-size: 30px;
+  font-size: 25px;
+  line-height: 2;
+  position: relative;
+  bottom: 50px;
 }
 
 .App {
@@ -20,7 +32,7 @@
 }
 
 .App-header {
-  background-color: #95b9c7;
+  background-color: #5d6d7e;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -28,4 +40,50 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+}
+
+.Hr {
+  margin-left: auto;
+  margin-right: auto;
+  background-color: white;
+  position: relative;
+  top: 10px;
+}
+
+.Input {
+  padding-top: 3px;
+  padding-right: 5px;
+  border: none;
+  outline: none;
+  font-size: 15px;
+  font-family: "Noto Sans JP", sans-serif;
+  font-weight: 200;
+  color: #5d6d7e;
+  width: 170px;
+  /* margin-left: 20px; */
+}
+
+::-webkit-input-placeholder {
+  font-size: 15px;
+  font-family: "Noto Sans JP", sans-serif;
+  font-weight: 200;
+  color: #5d6d7e;
+}
+::-moz-placeholder {
+  font-size: 15px;
+  font-family: "Noto Sans JP", sans-serif;
+  font-weight: 200;
+  color: #5d6d7e;
+}
+:-ms-input-placeholder {
+  font-size: 15px;
+  font-family: "Noto Sans JP", sans-serif;
+  font-weight: 200;
+  color: #5d6d7e;
+}
+::placeholder {
+  font-size: 15px;
+  font-family: "Noto Sans JP", sans-serif;
+  font-weight: 200;
+  color: #5d6d7e;
 }

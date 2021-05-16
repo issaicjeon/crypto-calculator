@@ -15,10 +15,11 @@ export default class Symbol extends React.Component {
   render() {
     return (
       <div>
-        Get the current price of any cryptocurrency:
         <div>
-          Enter symbol:{" "}
+          Enter symbol:
           <input
+            style={{ marginLeft: "15px" }}
+            className="Input"
             value={this.state.value}
             onChange={this.handleSymbolChange}
             placeholder="'BTC'"

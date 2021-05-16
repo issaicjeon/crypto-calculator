@@ -16,11 +16,13 @@ export default class Amount extends React.Component {
     return (
       <div>
         <div>
-          Enter amount:{" "}
+          <a style={{ marginRight: "11px" }}>Enter amount:</a>
+          <a style={{ fontSize: "21px" }}>$ </a>
           <input
+            className="Input"
             value={this.state.value}
             onChange={this.handleAmountChange}
-            placeholder="'$100'"
+            placeholder="'1000'"
           ></input>
         </div>
       </div>
