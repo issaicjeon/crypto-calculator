@@ -16,7 +16,7 @@ export default class Amount extends React.Component {
     return (
       <div>
         <div>
-          <a style={{ marginRight: "11px" }}>Enter amount:</a>
+          <a style={{ marginRight: "15px" }}>Enter amount:</a>
           <a style={{ fontSize: "21px" }}>$ </a>
           <input
             className="Input"

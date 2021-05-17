@@ -30,8 +30,9 @@ var Dates = (props) => {
   return (
     <div>
       <div>
-        Enter buying date:{" "}
+        <a style={{ marginRight: "15px" }}>Enter buying date:</a>
         <DatePicker
+          className="Input"
           selected={startDate}
           onChange={(date) => changeStart(date)}
           timeInputLabel="Time:"
@@ -40,8 +41,9 @@ var Dates = (props) => {
         />
       </div>
       <div>
-        Enter selling date:{" "}
+        <a style={{ marginRight: "15px" }}>Enter selling date:</a>
         <DatePicker
+          className="Input"
           selected={endDate}
           onChange={(date) => changeEnd(date)}
           timeInputLabel="Time:"

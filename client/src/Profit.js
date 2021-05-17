@@ -93,14 +93,27 @@ export default class Profit extends React.Component {
           getEndDate={this.updateEndDate}
         ></Dates>
         <div>
-          <button onClick={this.buttonClick}>Get Profit!</button>
+          <button className="Button" onClick={this.buttonClick}>
+            Get Profit!
+          </button>
         </div>
         {this.state.profit !== 0 && (
           <div>
-            The amount of profit from buying ${this.state.amount} of{" "}
+            The amount of profit from buying{" "}
+            {this.formatter.format(this.state.amount)} of{" "}
             {this.state.symbol.toUpperCase()} from {this.state.buydatestring} to{" "}
             {this.state.selldatestring} is:{" "}
-            {this.formatter.format(this.state.profit)}
+            <div className="Profit">
+              {this.state.profit < 0 ? (
+                <a style={{ color: "#F1948A" }}>
+                  {this.formatter.format(this.state.profit)}
+                </a>
+              ) : (
+                <a style={{ color: "#73c6b6" }}>
+                  {this.formatter.format(this.state.profit)}
+                </a>
+              )}
+            </div>
           </div>
         )}
       </div>

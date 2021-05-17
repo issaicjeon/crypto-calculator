@@ -63,6 +63,40 @@
   /* margin-left: 20px; */
 }
 
+.Profit {
+  font-size: 27px;
+  font-weight: 600;
+}
+
+button {
+  font-family: "Noto Sans JP", sans-serif;
+  font-weight: 200;
+  color: #5d6d7e;
+  font-size: 15px;
+  padding: 3px 6px;
+  border-radius: 4px;
+  border: none;
+  text-decoration: none;
+  display: inline-block;
+  transition-duration: 0.5s;
+}
+
+button.active.focus,
+button.active:focus,
+button.focus,
+button:active.focus,
+button:active:focus,
+button:focus {
+  outline: none;
+  box-shadow: none;
+  background-color: white;
+}
+
+button:hover {
+  background-color: #cacfd2;
+  cursor: pointer;
+}
+
 ::-webkit-input-placeholder {
   font-size: 15px;
   font-family: "Noto Sans JP", sans-serif;
