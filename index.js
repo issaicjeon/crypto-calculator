@@ -12,26 +12,10 @@ var symbol = "";
 var buydate = "";
 var selldate = "";
 var amount = -1;
-var exchange = new ccxt.binance();
+var exchange = new ccxt.bequant();
+
 // (async () => {
 //   console.log(await exchange.loadMarkets());
-// })();
-
-// (async () => {
-//   let sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-//   if (exchange.has.fetchOHLCV) {
-//     console.log("Jello");
-//     await sleep(exchange.rateLimit); // milliseconds
-
-//     //get buying and selling prices from API
-//     var buyamount = await exchange.fetchOHLCV(
-//       "BTC/USDT",
-//       "1m",
-//       exchange.parse8601("2018-01-01T00:00:00Z"),
-//       1
-//     );
-//     console.log(buyamount);
-//   }
 // })();
 
 app.post("/symbol", (req, res) => {
@@ -74,21 +58,23 @@ app.get("/profit", (req, res) => {
         1
       );
 
+      console.log("buy: " + buyamount);
+      console.log("sell: " + sellamount);
       //calculate profit
       var shares = amount / buyamount[0][4];
       var profit = (sellamount[0][4] - buyamount[0][4]) * shares;
-      console.log(profit);
+      console.log("profit: " + profit);
       res.send({ profit });
     }
   })();
 });
 
 /*TODO:
--Add CSS - with moving background
--Change exchange to get data before 2017 (currently using binance)
--Be able to enter new times/amounts/symbols after the first time without refreshing page 
--Dropdown of symbols
+-Add CSS (DONE)
+-Change exchange to get data before 2017 (currently using binance) (DONE)
+-Be able to enter new times/amounts/symbols after the first time without refreshing page
 -Add loading symbol while profit is fetched
+-Dropdown of symbols
 -Throw error if sell date is after buy date or dates out of range
 -Error if symbol incorrect
 */
