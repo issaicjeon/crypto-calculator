@@ -23,6 +23,7 @@ export default class Profit extends React.Component {
       selldatestring: selldate.toLocaleString(),
       amount: 0,
       profit: 0,
+      isLoading: null,
     };
   }
 
@@ -60,6 +61,10 @@ export default class Profit extends React.Component {
   };
 
   buttonClick = () => {
+    this.setState({
+      isLoading: true,
+    });
+
     axios.post("/symbol", {
       symbol: this.state.symbol,
     });
@@ -78,6 +83,7 @@ export default class Profit extends React.Component {
 
     axios.get("/profit").then((response) => {
       this.setState({
+        isLoading: false,
         profit: response.data.profit,
       });
     });
@@ -97,7 +103,12 @@ export default class Profit extends React.Component {
             Get Profit!
           </button>
         </div>
-        {this.state.profit !== 0 && (
+
+        {/* Loading state while data is being fetched */}
+        {this.state.isLoading === true && <div>Loading...</div>}
+
+        {/* Show profit data */}
+        {this.state.isLoading === false && (
           <div>
             The amount of profit from buying{" "}
             {this.formatter.format(this.state.amount)} of{" "}

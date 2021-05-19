@@ -14,14 +14,35 @@ var selldate = "";
 var amount = -1;
 var exchange = new ccxt.bequant();
 
-// (async () => {
-//   console.log(await exchange.loadMarkets());
-// })();
+// const url = "https://api.bequant.io/api/2/public/symbol";
+
+app.get("/currencies", (req, res) => {
+  (async () => {
+    let currencies = [];
+    let excurrencies = await exchange.fetchCurrencies();
+    //console.log(excurrencies);
+    for (var key in excurrencies) {
+      currencies.push({ label: excurrencies[key].id });
+      //console.log(currencies[key].id);
+    }
+    //console.log(currencies);
+    res.send({ currencies });
+  })();
+});
 
 app.post("/symbol", (req, res) => {
   symbol = req.body.symbol.toUpperCase();
   console.log(symbol);
 });
+
+// fetch(url)
+//   .then((res) => res.json())
+//   .then((json) => {
+//     // console.log(json);
+//     for (var key in json) {
+//       console.log(json[key].id);
+//     }
+//   });
 
 app.post("/buydate", (req, res) => {
   buydate = req.body.buydate;
@@ -73,7 +94,7 @@ app.get("/profit", (req, res) => {
 -Add CSS (DONE)
 -Change exchange to get data before 2017 (currently using binance) (DONE)
 -Be able to enter new times/amounts/symbols after the first time without refreshing page
--Add loading symbol while profit is fetched
+-Add loading symbol while profit is fetched (DONE)
 -Dropdown of symbols
 -Throw error if sell date is after buy date or dates out of range
 -Error if symbol incorrect
