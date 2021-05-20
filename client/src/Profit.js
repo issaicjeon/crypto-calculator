@@ -103,7 +103,6 @@ export default class Profit extends React.Component {
             Get Profit!
           </button>
         </div>
-
         {/* Loading state while data is being fetched */}
         {this.state.isLoading === true && <div>Loading...</div>}
 

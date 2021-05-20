@@ -12,20 +12,19 @@ var symbol = "";
 var buydate = "";
 var selldate = "";
 var amount = -1;
-var exchange = new ccxt.bequant();
-
-// const url = "https://api.bequant.io/api/2/public/symbol";
+var exchange = new ccxt.kraken();
 
 app.get("/currencies", (req, res) => {
   (async () => {
     let currencies = [];
-    let excurrencies = await exchange.fetchCurrencies();
-    //console.log(excurrencies);
-    for (var key in excurrencies) {
-      currencies.push({ label: excurrencies[key].id });
-      //console.log(currencies[key].id);
+    await exchange.loadMarkets();
+    var markets = exchange.markets;
+    //only interested in currencies with quote of USD
+    for (var key in markets) {
+      if (markets[key].quote === "USD") {
+        currencies.push({ label: markets[key].base });
+      }
     }
-    //console.log(currencies);
     res.send({ currencies });
   })();
 });
@@ -34,15 +33,6 @@ app.post("/symbol", (req, res) => {
   symbol = req.body.symbol.toUpperCase();
   console.log(symbol);
 });
-
-// fetch(url)
-//   .then((res) => res.json())
-//   .then((json) => {
-//     // console.log(json);
-//     for (var key in json) {
-//       console.log(json[key].id);
-//     }
-//   });
 
 app.post("/buydate", (req, res) => {
   buydate = req.body.buydate;
@@ -67,13 +57,13 @@ app.get("/profit", (req, res) => {
 
       //get buying and selling prices from API
       var buyamount = await exchange.fetchOHLCV(
-        `${symbol}/USDT`,
+        `${symbol}/USD`,
         "1m",
         buydate,
         1
       );
       var sellamount = await exchange.fetchOHLCV(
-        `${symbol}/USDT`,
+        `${symbol}/USD`,
         "1m",
         selldate,
         1
@@ -95,7 +85,7 @@ app.get("/profit", (req, res) => {
 -Change exchange to get data before 2017 (currently using binance) (DONE)
 -Be able to enter new times/amounts/symbols after the first time without refreshing page
 -Add loading symbol while profit is fetched (DONE)
--Dropdown of symbols
+-Dropdown of symbols (DONE)
 -Throw error if sell date is after buy date or dates out of range
 -Error if symbol incorrect
 */

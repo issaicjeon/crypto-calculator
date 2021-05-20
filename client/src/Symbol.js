@@ -10,46 +10,34 @@ export default class Symbol extends React.Component {
       symbol: "",
       options: [],
     };
-  }
 
-  handleSymbolChange = (symbol) => {
-    this.setState({
-      symbol,
-    });
-    this.props.getSymbol(this.state.symbol);
-  };
-
-  dropdown = () => {
     axios.get("/currencies").then((response) => {
       this.setState({
         options: response.data.currencies,
       });
-      console.log(response.data.currencies);
     });
+  }
+
+  handleSymbolChange = (event) => {
+    this.setState({
+      symbol: event.label,
+    });
+    this.props.getSymbol(event.label);
   };
 
   render() {
+    const { selectedOption } = this.state.symbol;
     return (
       <div>
-        {this.dropdown()}
         <div>
           Enter symbol:
           <Select
+            value={selectedOption}
             options={this.state.options}
-            // style={{ marginLeft: "15px" }}
-            className="Input"
+            className="Select"
             onChange={this.handleSymbolChange}
             placeholder="'BTC'"
-            value={this.state.symbol}
           />
-          {this.state.symbol !== "" && <div>{this.state.symbol}</div>}
-          {/* <input
-            style={{ marginLeft: "15px" }}
-            className="Input"
-            value={this.state.value}
-            onChange={this.handleSymbolChange}
-            placeholder="'BTC'"
-          ></input> */}
         </div>
       </div>
     );
