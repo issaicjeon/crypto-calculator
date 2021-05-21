@@ -12,16 +12,16 @@ var symbol = "";
 var buydate = "";
 var selldate = "";
 var amount = -1;
-var exchange = new ccxt.kraken();
+var exchange = new ccxt.binance();
 
 app.get("/currencies", (req, res) => {
   (async () => {
     let currencies = [];
     await exchange.loadMarkets();
     var markets = exchange.markets;
-    //only interested in currencies with quote of USD
+    //only interested in currencies with quote of USDT
     for (var key in markets) {
-      if (markets[key].quote === "USD") {
+      if (markets[key].quote === "USDT") {
         currencies.push({ label: markets[key].base });
       }
     }
@@ -56,24 +56,41 @@ app.get("/profit", (req, res) => {
       await sleep(exchange.rateLimit); // milliseconds
 
       //get buying and selling prices from API
-      var buyamount = await exchange.fetchOHLCV(
-        `${symbol}/USD`,
-        "1m",
-        buydate,
-        1
-      );
-      var sellamount = await exchange.fetchOHLCV(
-        `${symbol}/USD`,
-        "1m",
-        selldate,
-        1
-      );
+      try {
+        var buyamount = await exchange.fetchOHLCV(
+          `${symbol}/USDT`,
+          "1m",
+          buydate,
+          1
+        );
+      } catch (error) {
+        console.log(error);
+      }
 
+      try {
+        var sellamount = await exchange.fetchOHLCV(
+          `${symbol}/USDT`,
+          "1m",
+          selldate,
+          1
+        );
+      } catch (error) {
+        console.log(error);
+      }
+      var profit = "";
+
+      //dates out of range of currency
+      if (buyamount == "" || sellamount == "") {
+        profit = "error";
+        console.log(profit);
+        res.send({ profit });
+      }
       console.log("buy: " + buyamount);
       console.log("sell: " + sellamount);
+
       //calculate profit
       var shares = amount / buyamount[0][4];
-      var profit = (sellamount[0][4] - buyamount[0][4]) * shares;
+      profit = (sellamount[0][4] - buyamount[0][4]) * shares;
       console.log("profit: " + profit);
       res.send({ profit });
     }
@@ -86,6 +103,6 @@ app.get("/profit", (req, res) => {
 -Be able to enter new times/amounts/symbols after the first time without refreshing page
 -Add loading symbol while profit is fetched (DONE)
 -Dropdown of symbols (DONE)
--Throw error if sell date is after buy date or dates out of range
--Error if symbol incorrect
+-Throw error if sell date is after buy date or dates out of range (DONE)
+-Error if symbol incorrect (DONE)
 */

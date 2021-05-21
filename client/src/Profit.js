@@ -24,6 +24,7 @@ export default class Profit extends React.Component {
       amount: 0,
       profit: 0,
       isLoading: null,
+      error: 0,
     };
   }
 
@@ -87,6 +88,33 @@ export default class Profit extends React.Component {
         profit: response.data.profit,
       });
     });
+
+    if (!isFinite(String(this.state.amount))) {
+      this.setState({
+        error: 1,
+      });
+    }
+    if (this.state.buydate > new Date().getTime()) {
+      this.setState({
+        error: 2,
+      });
+    } else if (this.state.selldate > new Date().getTime()) {
+      this.setState({
+        error: 3,
+      });
+    } else if (this.state.buydate > this.state.selldate) {
+      this.setState({
+        error: 4,
+      });
+    }
+  };
+
+  update = () => {
+    if (this.state.profit === "error") {
+      this.setState({
+        error: 1,
+      });
+    }
   };
 
   render() {
@@ -103,29 +131,59 @@ export default class Profit extends React.Component {
             Get Profit!
           </button>
         </div>
-        {/* Loading state while data is being fetched */}
-        {this.state.isLoading === true && <div>Loading...</div>}
 
-        {/* Show profit data */}
-        {this.state.isLoading === false && (
-          <div>
-            The amount of profit from buying{" "}
-            {this.formatter.format(this.state.amount)} of{" "}
-            {this.state.symbol.toUpperCase()} from {this.state.buydatestring} to{" "}
-            {this.state.selldatestring} is:{" "}
-            <div className="Profit">
-              {this.state.profit < 0 ? (
-                <a style={{ color: "#F1948A" }}>
-                  {this.formatter.format(this.state.profit)}
-                </a>
-              ) : (
-                <a style={{ color: "#73c6b6" }}>
-                  {this.formatter.format(this.state.profit)}
-                </a>
-              )}
-            </div>
+        {this.state.profit === "error" && this.state.error === 0 && (
+          <div style={{ color: "#F1948A" }}>
+            This currency is not supported this far back!
           </div>
         )}
+        {this.state.error === 1 && (
+          <div style={{ color: "#F1948A" }}>Entered amount is invalid!</div>
+        )}
+        {this.state.error === 2 && (
+          <div style={{ color: "#F1948A" }}>
+            Buying date is past current time!
+          </div>
+        )}
+        {this.state.error === 3 && (
+          <div style={{ color: "#F1948A" }}>
+            Selling date is past current time!
+          </div>
+        )}
+
+        {this.state.error === 4 && (
+          <div style={{ color: "#F1948A" }}>
+            Buying date is past selling date!
+          </div>
+        )}
+
+        {/* Loading state while data is being fetched */}
+        {this.state.isLoading === true &&
+          !this.state.error &&
+          this.state.profit !== "error" && <div>Loading...</div>}
+
+        {/* Show profit data */}
+        {this.state.isLoading === false &&
+          !this.state.error &&
+          this.state.profit !== "error" && (
+            <div>
+              The amount of profit from buying{" "}
+              {this.formatter.format(this.state.amount)} of{" "}
+              {this.state.symbol.toUpperCase()} from {this.state.buydatestring}{" "}
+              to {this.state.selldatestring} is:{" "}
+              <div className="Profit">
+                {this.state.profit < 0 ? (
+                  <a style={{ color: "#F1948A" }}>
+                    {this.formatter.format(this.state.profit)}
+                  </a>
+                ) : (
+                  <a style={{ color: "#73c6b6" }}>
+                    {this.formatter.format(this.state.profit)}
+                  </a>
+                )}
+              </div>
+            </div>
+          )}
       </div>
     );
   }
