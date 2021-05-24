@@ -1,8 +1,15 @@
 const express = require("express");
 const ccxt = require("ccxt");
-
 const app = express();
-app.listen(process.env.PORT || 4000);
+const path = require("path");
+
+const PORT = process.env.PORT || 4000;
+app.listen(PORT, () => {
+  console.log("Listening on " + PORT);
+});
+
+app.use(express.static(path.join(__dirname, "client/build")));
+
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
