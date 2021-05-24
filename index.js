@@ -1,5 +1,4 @@
 const express = require("express");
-const fetch = require("node-fetch");
 const ccxt = require("ccxt");
 
 const app = express();
@@ -14,6 +13,7 @@ var selldate = "";
 var amount = -1;
 var exchange = new ccxt.binance();
 
+//send list of available symbols to client
 app.get("/currencies", (req, res) => {
   (async () => {
     let currencies = [];
@@ -96,13 +96,3 @@ app.get("/profit", (req, res) => {
     }
   })();
 });
-
-/*TODO:
--Add CSS (DONE)
--Change exchange to get data before 2017 (currently using binance) (DONE)
--Be able to enter new times/amounts/symbols after the first time without refreshing page
--Add loading symbol while profit is fetched (DONE)
--Dropdown of symbols (DONE)
--Throw error if sell date is after buy date or dates out of range (DONE)
--Error if symbol incorrect (DONE)
-*/

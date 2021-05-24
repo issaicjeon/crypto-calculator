@@ -1,7 +1,24 @@
 import React from "react";
 import axios from "axios";
 import Select from "react-select";
-import "react-dropdown/style.css";
+
+//change font color and remove border
+const customStyles = {
+  option: (provided) => ({
+    ...provided,
+    color: "#5d6d7e",
+  }),
+  control: (provided) => ({
+    ...provided,
+    border: 0,
+    boxShadow: "none",
+    color: "#5d6d7e",
+  }),
+  singleValue: (provided) => ({
+    ...provided,
+    color: "#5d6d7e",
+  }),
+};
 
 export default class Symbol extends React.Component {
   constructor() {
@@ -18,6 +35,7 @@ export default class Symbol extends React.Component {
     });
   }
 
+  //update symbol change to Profit.js
   handleSymbolChange = (event) => {
     this.setState({
       symbol: event.label,
@@ -37,6 +55,7 @@ export default class Symbol extends React.Component {
             className="Select"
             onChange={this.handleSymbolChange}
             placeholder="'BTC'"
+            styles={customStyles}
           />
         </div>
       </div>

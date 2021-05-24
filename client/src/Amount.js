@@ -8,6 +8,7 @@ export default class Amount extends React.Component {
     };
   }
 
+  //Update amount to Profit.js
   handleAmountChange = (event) => {
     this.props.getAmount(event.target.value);
   };

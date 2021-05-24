@@ -66,29 +66,27 @@ export default class Profit extends React.Component {
       isLoading: true,
     });
 
-    axios.post("/symbol", {
-      symbol: this.state.symbol,
-    });
-
-    axios.post("/buydate", {
-      buydate: this.state.buydate,
-    });
-
-    axios.post("/selldate", {
-      selldate: this.state.selldate,
-    });
-
-    axios.post("/amount", {
-      amount: this.state.amount,
-    });
-
+    //Send and get profit from server
     axios.get("/profit").then((response) => {
       this.setState({
         isLoading: false,
         profit: response.data.profit,
       });
     });
+    axios.post("/symbol", {
+      symbol: this.state.symbol,
+    });
+    axios.post("/buydate", {
+      buydate: this.state.buydate,
+    });
+    axios.post("/selldate", {
+      selldate: this.state.selldate,
+    });
+    axios.post("/amount", {
+      amount: this.state.amount,
+    });
 
+    //Error handling
     if (!isFinite(String(this.state.amount))) {
       this.setState({
         error: 1,
@@ -105,14 +103,6 @@ export default class Profit extends React.Component {
     } else if (this.state.buydate > this.state.selldate) {
       this.setState({
         error: 4,
-      });
-    }
-  };
-
-  update = () => {
-    if (this.state.profit === "error") {
-      this.setState({
-        error: 1,
       });
     }
   };
