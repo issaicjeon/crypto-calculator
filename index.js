@@ -2,7 +2,7 @@ const express = require("express");
 const ccxt = require("ccxt");
 
 const app = express();
-app.listen(4000, () => console.log("Listening at 4000"));
+app.listen(process.env.PORT || 4000);
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
